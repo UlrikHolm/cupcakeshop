@@ -1,0 +1,36 @@
+    body{
+        margin: 30px;
+        background-color: #E8E8E8;
+    }
+
+    .my-container{
+        border: 1px solid green;
+    }
+
+    .my-row{
+        border: 1px solid red;
+    }
+
+    .my-col{
+        border: 2px dotted blue; 
+    }
+
+    #logo-main {
+    display: block;
+    margin: 8px auto;
+    display: inline-block;
+    }
+
+    #banner {
+        height: 200px;
+        background-image: url("/img/bannerbg.png");
+        background-size: 300px 300px;
+    }
+
+    #navbar{
+        padding: 0;
+    }
+
+    option[value=""][disabled] {
+        display: none;
+    }
