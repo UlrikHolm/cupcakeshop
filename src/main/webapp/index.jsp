@@ -14,7 +14,9 @@
     </div>
     <div class="row">
         <div class="col text-center">
-            <a class="btn btn-success" href="bestil.jsp">Bestil</a>
+            <form action="/bestil" method="get">
+                <input class="btn btn-success" type="submit" value="Bestil">
+            </form>
         </div>
     </div>
     </br>

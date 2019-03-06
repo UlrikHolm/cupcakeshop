@@ -22,7 +22,7 @@
                     <a href="index.jsp" class="nav-link ">Forside</a>
                 </li>
                 <li class="nav-item">
-                    <a href="bestil.jsp" class="nav-link ">Bestil</a>
+                    <a href="bestil" class="nav-link ">Bestil</a>
                 </li>
                 <li class="nav-item">
                     <a href="#" class="nav-link">Ordrer </a>

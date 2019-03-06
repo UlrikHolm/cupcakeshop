@@ -1,5 +1,6 @@
 package datamappers;
 
+import model.BundCake;
 import model.TopCake;
 import util.Connector;
 
@@ -39,4 +40,33 @@ public class TopBundMapper {
         return topList;
 
     }
+
+    public  static List<BundCake> readBunds() {
+
+        List<BundCake> bundList = new ArrayList<>();
+
+        try {
+            Connection con = Connector.connection();
+            String sql = "SELECT * FROM Cupcake.Bund;";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ResultSet resultSet = ps.executeQuery(sql);
+
+            while (resultSet.next()) {
+                BundCake bundCake = new BundCake
+                        (resultSet.getInt("bund_id"),
+                                resultSet.getString("navn_bund"),
+                                resultSet.getInt("pris_bund"));
+                bundList.add(bundCake);
+            }
+
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return bundList;
+
+    }
+
+
 }
