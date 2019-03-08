@@ -1,3 +1,4 @@
+<%@ page import="model.Bruger" %>
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -24,20 +25,44 @@
                 <li class="nav-item">
                     <a href="bestil" class="nav-link ">Bestil</a>
                 </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">Ordrer </a>
-                </li>
-                <li class="nav-item">
-                    <a href="kunder.jsp" class="nav-link">Kunder</a>
-                </li>
+                <%
+                    int brugerType = 1;
+                    brugerType = (int) session.getAttribute("brugerType");
+                    if(brugerType == 2){
+                        out.print(
+                                "<li class=\"nav-item\">" +
+                    " <a href=\"#\" class=\"nav-link\">Ordrer </a> " +
+                                        "</li>"+
+                "<li class=\"nav-item\">"+
+                    "<a href=\"kunder\" class=\"nav-link\">Kunder</a>"+
+                "</li>"
+                        );
+                    }
+                %>
             </ul>
             <ul class="nav navbar-nav ml-auto">
-                <a href="#" class="nav-link">
-                    <span class="fas fa-user"></span> bruger@email.dk
-                </a>
-                <a href="#" class="nav-link">
-                    <span class="fas fa-coins"></span> Saldo: 250
-                </a>
+                <a href="login.jsp" class="nav-link">
+                    <span class="fas fa-user"></span>
+                    <%
+                        boolean loggedin = false;
+                        loggedin = (boolean) session.getAttribute("loggedin");
+
+                        Bruger brugerData = (Bruger)session.getAttribute("brugerData");
+
+                        String brugerInfo = "";
+
+
+                        if(loggedin == true){
+                            brugerInfo = brugerData.getEmail()+"<a>" +
+                             "<a href=\"#\" class=\"nav-link\">"+
+                             "<span class=\"fas fa-coins\"></span> Saldo: " + brugerData.getSaldo() +
+                            "</a>";
+                            out.print(brugerInfo);
+                        } else {
+                            out.print("Log Ind<a/>");
+                        }
+
+                    %>
                 <a href="kurv.jsp" class="nav-link">
                     <span class="fas fa-shopping-basket"></span>
                 </a>

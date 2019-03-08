@@ -14,12 +14,12 @@
         </div>
         <div class="col-lg-4 col-md-6">
             <center><h5>Indtast e-mail og kodeord</h5></center>
-            <form method="post" action="Controller">
+            <form method="get" action="HentLogin">
             <div class="input-group mb-2 mr-md-2">
                 <div class="input-group-prepend">
                     <div class="input-group-text"><i class="fas fa-envelope"></i></div>
                 </div>
-                <input type="text" class="form-control" name="emial" placeholder="e-mail">
+                <input type="text" class="form-control" name="email" placeholder="e-mail">
             </div>
             <div class="input-group mb-2 mr-sm-2">
                 <div class="input-group-prepend">
@@ -28,7 +28,7 @@
                 <input type="password" class="form-control" name="kodeord" placeholder="kodeord">
             </div>
             <div class="input-group mb-2 mr-sm-2 justify-content-center">
-                <button type="button" class="btn btn-success btn-block">Log ind</button>
+                <input type="submit" name="loginknap" value="log ind" class="btn btn-success btn-block"/>
             </div>
             <div class="input-group mb-2 mr-sm-2 justify-content-center">
                 <a href="opret.jsp">Opret konto</a>

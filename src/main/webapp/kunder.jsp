@@ -1,4 +1,5 @@
-
+<%@ page import="model.Bruger" %>
+<%@ page import="java.util.List" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!doctype html>
 <html lang="en">
@@ -23,26 +24,28 @@
                     <th scope="col"></th>
                 </tr>
                 </thead>
+                <form action="/kunder" method="get">
                 <tbody>
-                <tr>
-                    <th scope="row">1</th>
-                    <td>Mark@email.com</td>
-                    <td>50</td>
-                    <td><a class="btn btn-success" href="#">Ordrer</a></td>
-                </tr>
-                <tr>
-                    <th scope="row">2</th>
-                    <td>Jacob@yahoo.dk</td>
-                    <td>0</td>
-                    <td><a class="btn btn-success" href="#">Ordrer</a></td>
-                </tr>
-                <tr>
-                    <th scope="row">3</th>
-                    <td>Larry@gmail.com</td>
-                    <td>250</td>
-                    <td><a class="btn btn-success" href="#">Ordrer</a></td>
-                </tr>
+                <%
+                    List<Bruger> brugerList = (List<Bruger>) request.getAttribute("brugerlisten");
+
+                    for (int i = 0; i < brugerList.size() ; i++) {
+                        String brugerth = "";
+
+                        String printBrugerID = Integer.toString(brugerList.get(i).getBrugerID());
+                        String printBrugerEmail = brugerList.get(i).getEmail();
+                        String printBrugerSaldo =  Integer.toString(brugerList.get(i).getSaldo());
+
+                        brugerth = "<tr><th>_printBrugerID_</th><td> _printBrugerEmail_</td><td>_printBrugerSaldo_</td>" +
+                                "<td><input class=\"btn btn-success\" type=\"submit\" value=\"Ordrer\"></td></tr>";
+                        brugerth = brugerth.replace("_printBrugerID_",printBrugerID);
+                        brugerth = brugerth.replace("_printBrugerEmail_",printBrugerEmail);
+                        brugerth = brugerth.replace("_printBrugerSaldo_",printBrugerSaldo);
+                        out.println(brugerth);
+                    }
+                %>
                 </tbody>
+                </form>
             </table>
         </div>
         <div class="col-1 text-center">
