@@ -12,7 +12,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet(name = "FrontController",urlPatterns = {"/index.jsp"})
+@WebServlet(name = "FrontController")
 public class FrontController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
@@ -25,7 +25,7 @@ public class FrontController extends HttpServlet {
         HttpSession session = request.getSession();
         session.setAttribute("brugerType",brugerType);
         session.setAttribute("loggedin",ok);
-        request.getRequestDispatcher("/index2.jsp").forward(request, response);
+        request.getRequestDispatcher("/index.jsp").forward(request, response);
 
     }
 }
