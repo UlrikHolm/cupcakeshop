@@ -1,4 +1,7 @@
-
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="model.KurveLinje" %>
+<%@ page import="java.util.HashMap" %>
+<%@ page import="model.BundCake" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!doctype html>
 <html lang="en">
@@ -27,6 +30,17 @@
                 </thead>
                 <tbody>
                 <tr>
+                    <%
+                        ArrayList<KurveLinje> kurv = (ArrayList) session.getAttribute("kurvKey");
+                        if (kurv != null)
+                        for (int i = 0; i < kurv.size(); i++) {
+                            out.print("<tr>" + " <td>" +
+                            kurv.get(i).getBundID() + "</td><td>" + kurv.get(i).getTopID() + "</td><td>" + kurv.get(i).getAntal() + "</td>" +
+                                    "</tr>");
+                        } else {
+                            out.print("Listen er tom");
+                        }
+                    %>
                     <td>Chocolate</td>
                     <td>Blueberry</td>
                     <td>2</td>

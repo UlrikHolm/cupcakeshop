@@ -23,13 +23,16 @@ public class HentTopBund extends HttpServlet {
 
         List<TopCake> topList = TopBundMapper.readTops();
 
-        request.setAttribute("toplisten",topList); //sender nøgle med object
+        request.setAttribute("toplisten", topList); //sender nøgle med object
 
 
         List<BundCake> bundList = TopBundMapper.readBunds();
 
-        request.setAttribute("bundlisten",bundList); //sender nøgle med object
+        request.setAttribute("bundlisten", bundList); //sender nøgle med object
 
-        request.getServletContext().getRequestDispatcher("/bestil.jsp").forward(request,response);
+        request.getServletContext().getRequestDispatcher("/bestil.jsp").forward(request, response);
+
+
     }
 }
+

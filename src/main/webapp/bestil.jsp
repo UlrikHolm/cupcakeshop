@@ -12,12 +12,13 @@
             </br>
         </div>
     </div>
-    <form action="/FrontController" method="post">
+    <form action="/fyldkurv" method="get">
+        <input type="hidden" name="source" value="addtocart"/>
     <div class="row">
         <div class="col-md-3 text-center">
             <label>Bund:</label>
-            <select class="form-control" id="selBund">
-                <option value="" disabled selected>Vælg bund
+            <select class="form-control" name="bottom">
+                <option value="0" disabled selected>Vælg bund
                    <%
 
                     List<BundCake> bundList = (List<BundCake>) request.getAttribute("bundlisten");
@@ -38,8 +39,8 @@
         </div>
         <div class="col-md-3 text-center">
             <label>Topping:</label>
-            <select class="form-control" id="selTopping">
-                <option value="" disabled selected>Vælg top
+            <select class="form-control" name="top">
+                <option value="0" disabled selected>Vælg top
                 <%
 
                     List<TopCake> topList = (List<TopCake>) request.getAttribute("toplisten");
@@ -63,8 +64,8 @@
         </div>
         <div class="col-md-3 text-center">
             <label>Antal:</label>
-            <select class="form-control" id="selAntal">
-                <option value="" disabled selected>Vælg antal
+            <select class="form-control" name="number">
+                <option value="0" disabled selected>Vælg antal
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
@@ -79,7 +80,7 @@
         </div>
         <div class="col-md-3 text-center">
             <label>&zwnj;</label>
-            <button type="button" class="btn btn-success btn-block">Læg i kurv</button>
+            <input type="submit" name="selectcupcake" value="Læg i kurv" class="btn btn-success form-control"/>
         </div>
     </div>
     </form>
