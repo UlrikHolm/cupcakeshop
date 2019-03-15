@@ -1,9 +1,7 @@
 package servlet;
 
-import datamappers.BrugerMapper;
-import datamappers.OrdrerMapper;
-import model.Bruger;
-import model.Ordre;
+import datamappers.OrderMapper;
+import model.Order;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -21,7 +19,12 @@ public class HentOrdrer extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        List<Ordre> ordreList = OrdrerMapper.readOrdre();
+        List<Order> ordreList = OrderMapper.loadOrder();
+        for (int i = 0; i < ordreList.size() ; i++) {
+            System.out.println(OrderMapper.loadOrder().get(i).getOrdreID() + " " + OrderMapper.loadOrder().get(i).getTimeNow() +
+                    " " + OrderMapper.loadOrder().get(i).getBrugerID() + " " + OrderMapper.loadOrder().get(i).getTotalSum());
+
+        }
 
         request.setAttribute("ordrelisten",ordreList); //sender nøgle med object
 

@@ -6,19 +6,32 @@ public class KurveLinje {
     private int bundID;
     private int topID;
     private int antal;
-    private int stkPris;
-    private int totalPris;
+    private String brugerID;
+
 
     public KurveLinje(int kurvelinjeID, int bundID, int topID, int antal, int stkPris, int totalPris) {
         this.kurvelinjeID = kurvelinjeID;
         this.bundID = bundID;
         this.topID = topID;
         this.antal = antal;
-        this.stkPris = stkPris;
-        this.totalPris = totalPris;
+        this.brugerID = brugerID;
+
     }
 
+
+
     public KurveLinje() {
+    }
+
+    @Override
+    public String toString() {
+        return "KurveLinje{" +
+                "kurvelinjeID=" + kurvelinjeID +
+                ", bundID=" + bundID +
+                ", topID=" + topID +
+                ", antal=" + antal +
+                ", brugerID='" + brugerID + '\'' +
+                '}';
     }
 
     public int getKurvelinjeID() {
@@ -53,19 +66,11 @@ public class KurveLinje {
         this.antal = antal;
     }
 
-    public int getStkPris() {
-        return stkPris;
+    public String getBrugerID() {
+        return brugerID;
     }
 
-    public void setStkPris(int stkPris) {
-        this.stkPris = stkPris;
-    }
-
-    public int getTotalPris() {
-        return totalPris;
-    }
-
-    public void setTotalPris(int totalPris) {
-        this.totalPris = totalPris;
+    public void setBrugerID(String brugerID) {
+        this.brugerID = brugerID;
     }
 }

@@ -37,7 +37,8 @@
                         String printBrugerSaldo =  Integer.toString(brugerList.get(i).getSaldo());
 
                         brugerth = "<tr><th>_printBrugerID_</th><td> _printBrugerEmail_</td><td>_printBrugerSaldo_</td>" +
-                                "<td><input class=\"btn btn-success\" type=\"submit\" value=\"Ordrer\"></td></tr>";
+                        "<td><form action=\"/kunder\" method=\"get\">"+"<input type=\"hidden\" name=\"kundeordrer\" value=\"" + printBrugerID + "\"/>" +
+                        "<button type=\"submit\" class=\"btn btn-success \">Ordrer</button>\n</form>";
                         brugerth = brugerth.replace("_printBrugerID_",printBrugerID);
                         brugerth = brugerth.replace("_printBrugerEmail_",printBrugerEmail);
                         brugerth = brugerth.replace("_printBrugerSaldo_",printBrugerSaldo);

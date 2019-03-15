@@ -19,6 +19,13 @@ public class Bruger {
         this.saldo = saldo;
     }
 
+    public Bruger(int brugerType, String email, String kodeord, int saldo) {
+        this.brugerType = brugerType;
+        this.email = email;
+        this.kodeord = kodeord;
+        this.saldo = saldo;
+    }
+
     public int getBrugerID() {
         return brugerID;
     }

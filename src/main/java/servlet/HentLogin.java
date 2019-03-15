@@ -45,10 +45,14 @@ public class HentLogin extends HttpServlet {
             session.setAttribute("brugerData",bruger);
             session.setAttribute("brugerType", brugerType);
             session.setAttribute("loggedin",ok);
-            request.getRequestDispatcher("/login.jsp").forward(request, response);
+            request.setAttribute("loginstatus","loginfindes");
+            request.setAttribute("message","Du er nu logget ind.");
+            request.getRequestDispatcher("/bestil").forward(request, response);
 
         } else  {
-            request.getRequestDispatcher("/kurv.jsp").forward(request, response);
+            request.setAttribute("loginstatus","error");
+            request.setAttribute("message","Det login findes ikke.");
+            request.getRequestDispatcher("/login.jsp").forward(request, response);
         }
 
     }

@@ -14,6 +14,19 @@
         </div>
         <div class="col-lg-4 col-md-6">
             <center><h5>Indtast e-mail og kodeord</h5></center>
+            <%  String besked = (String) request.getAttribute("message");
+                String status = (String) request.getAttribute("loginstatus");
+                if (besked != null && status != null) {
+                    String alert = "";
+                    if (status.equals("error")) {
+                        alert = "<div class=\"alert alert-danger\">_message_</div>";
+                    } else if (status.equals("loginfindes") || status.equals("brugerlaves")){
+                        alert = "<div class=\"alert alert-success\">_message_</div>";
+                    }
+                    alert = alert.replace("_message_", besked);
+                    out.println(alert);
+                }
+            %>
             <form method="get" action="HentLogin">
             <div class="input-group mb-2 mr-md-2">
                 <div class="input-group-prepend">

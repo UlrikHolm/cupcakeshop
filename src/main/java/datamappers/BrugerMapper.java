@@ -39,7 +39,58 @@ public class BrugerMapper {
             e.printStackTrace();
         }
         return brugerList;
-
     }
 
+    public static void createBruger(Bruger bruger) {
+        Connection connection = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        String sql = "";
+        try {
+            Connection con = Connector.connection();
+
+
+            sql = "INSERT INTO `Cupcake`.`Bruger` (`brugertype_id`, `email`, `kodeord`, `saldo`) VALUES (?, ?, ?, ?);";
+
+            ps = con.prepareStatement(sql);
+
+            ps.setInt(1, bruger.getBrugerType());
+            ps.setString(2, bruger.getEmail());
+            ps.setString(3, bruger.getKodeord());
+            ps.setInt(4, bruger.getSaldo());
+
+            ps.executeUpdate();
+
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void udskiftSaldo(Bruger bruger) {
+        Connection connection = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        String sql = "";
+        try {
+            Connection con = Connector.connection();
+
+
+            sql = "UPDATE Cupcake.Bruger SET saldo = ? WHERE (bruger_id = ?);";
+
+            ps = con.prepareStatement(sql);
+
+            ps.setInt(1, bruger.getSaldo());
+            ps.setInt(2, bruger.getBrugerID());
+
+
+            ps.executeUpdate();
+
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }

@@ -1,6 +1,5 @@
-<%@ page import="model.Ordre" %>
 <%@ page import="java.util.List" %>
-<%@ page import="model.Ordre" %>
+<%@ page import="model.Order" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!doctype html>
 <html lang="en">
@@ -20,7 +19,7 @@
                 <thead class="thead-light">
                 <tr>
                     <th scope="col">Ordre ID</th>
-                    <th scope="col">Dato</th>
+                    <th scope="col">Tidspunkt</th>
                     <th scope="col">Kunde ID</th>
                     <th scope="col">Total sum</th>
                 </tr>
@@ -28,20 +27,20 @@
                 <form action="/kunder" method="get">
                 <tbody>
                 <%
-                    List<Ordre> ordreList = (List<Ordre>) request.getAttribute("ordrelisten");
+                    List<Order> ordreList = (List<Order>) request.getAttribute("ordrelisten");
 
                     for (int i = 0; i < ordreList.size() ; i++) {
                         String ordretable = "";
 
                         String printOrdreID = Integer.toString(ordreList.get(i).getOrdreID());
-                        String printOrdreDato = Integer.toString(ordreList.get(i).getDato());
+                        String printOrdreTime = ordreList.get(i).getTimeNow();
                         String printOrdreBrugerID = Integer.toString(ordreList.get(i).getBrugerID());
                         String printOrdreTotal = Integer.toString(ordreList.get(i).getTotalSum());
 
-                        ordretable = "<tr><th>_printOrdreID_</th><td> _printOrdreDato_</td><td>_printOrdreBrugerID_</td>" +
+                        ordretable = "<tr><th>_printOrdreID_</th><td> _printOrdreTime_</td><td>_printOrdreBrugerID_</td>" +
                                 "<td>_printOrdreTotal_</td></tr>";
                         ordretable = ordretable.replace("_printOrdreID_",printOrdreID);
-                        ordretable = ordretable.replace("_printOrdreDato_",printOrdreDato);
+                        ordretable = ordretable.replace("_printOrdreTime_",printOrdreTime);
                         ordretable = ordretable.replace("_printOrdreBrugerID_",printOrdreBrugerID);
                         ordretable = ordretable.replace("_printOrdreTotal_",printOrdreTotal);
                         out.println(ordretable);

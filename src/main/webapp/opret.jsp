@@ -15,28 +15,43 @@
         </div>
         <div class="col-lg-4 col-md-6">
             <center><h5>Indtast e-mail og kodeord</h5></center>
+            <%  String besked = (String) request.getAttribute("message");
+                String status = (String) request.getAttribute("status");
+                if (besked != null && status != null) {
+                    String alert = "";
+                    if (status.equals("tomkode") || status.equals("ikkeenskoder") || status.equals("ikkemail")) {
+                        alert = "<div class=\"alert alert-danger\">_message_</div>";
+                    } else if (status.equals("brugerlaves")){
+                        alert = "<div class=\"alert alert-success\">_message_</div>";
+                    }
+                    alert = alert.replace("_message_", besked);
+                    out.println(alert);
+                }
+            %>
 
-            <div class="input-group mb-2 mr-sm-2">
-                <div class="input-group-prepend">
-                    <div class="input-group-text"><i class="fas fa-envelope"></i></div>
+            <form method="get" action="OpretLogin">
+                <div class="input-group mb-2 mr-md-2">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text"><i class="fas fa-envelope"></i></div>
+                    </div>
+                    <input type="text" class="form-control" name="email" placeholder="e-mail">
                 </div>
-                <input type="text" class="form-control" id="email" placeholder="e-mail">
-            </div>
-            <div class="input-group mb-2 mr-sm-2">
-                <div class="input-group-prepend">
-                    <div class="input-group-text"><i class="fas fa-lock"></i></div>
+                <div class="input-group mb-2 mr-sm-2">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text"><i class="fas fa-lock"></i></div>
+                    </div>
+                    <input type="password" class="form-control" name="kodeord" placeholder="kodeord">
                 </div>
-                <input type="password" class="form-control" id="password" placeholder="kodeord">
-            </div>
-            <div class="input-group mb-2 mr-sm-2">
-                <div class="input-group-prepend">
-                    <div class="input-group-text"><i class="fas fa-lock"></i></div>
+                <div class="input-group mb-2 mr-sm-2">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text"><i class="fas fa-lock"></i></div>
+                    </div>
+                    <input type="password" class="form-control" name="kodeord2" placeholder="gentag kodeord">
                 </div>
-                <input type="password" class="form-control" id="password" placeholder="gentag kodeord">
-            </div>
-            <div class="input-group mb-2 mr-sm-2 justify-content-center">
-                <button type="button" class="btn btn-success btn-block">Opret</button>
-            </div>
+                <div class="input-group mb-2 mr-sm-2 justify-content-center">
+                    <input type="submit" name="opretknap" value="Opret" class="btn btn-success btn-block"/>
+                </div>
+            </form>
         </div>
         <div class="col-lg-4 col-md-3 text-center">
         </div>

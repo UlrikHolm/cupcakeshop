@@ -1,4 +1,6 @@
 <%@ page import="model.Bruger" %>
+<%@ page import="datamappers.BrugerMapper" %>
+<%@ page import="com.sun.org.apache.bcel.internal.generic.BREAKPOINT" %>
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -27,8 +29,11 @@
                     <a href="bestil" class="nav-link ">Bestil</a>
                 </li>
                 <%
-                    int brugerType;
-                    brugerType = (int) session.getAttribute("brugerType");
+                    int brugerType = 0;
+                    if(session.getAttribute("brugerType") != null) {
+                        brugerType = (int) session.getAttribute("brugerType");
+                        //System.out.println(brugerType);
+                    }
                     if(brugerType == 2){
                         out.print(
                                 "<li class=\"nav-item\">" +
@@ -42,25 +47,47 @@
                 %>
             </ul>
             <ul class="nav navbar-nav ml-auto">
-                <a href="login.jsp" class="nav-link">
-                    <span class="fas fa-user"></span>
                     <%
                         boolean loggedin = false;
+                        if (session.getAttribute("loggedin") != null){
                         loggedin = (boolean) session.getAttribute("loggedin");
+                        }
 
                         Bruger brugerData = (Bruger)session.getAttribute("brugerData");
 
                         String brugerInfo = "";
 
+                        String BrugerSaldo = "";
+
+                        if (loggedin){
+                            for (int i = 0; i < BrugerMapper.readBrugers().size(); i++) {
+                                if (BrugerMapper.readBrugers().get(i).getBrugerID() == brugerData.getBrugerID()){
+                                    System.out.println(i);
+                                    BrugerSaldo = Integer.toString(BrugerMapper.readBrugers().get(i).getSaldo());
+
+                                }
+
+                            }
+                        }
+
 
                         if(loggedin == true){
-                            brugerInfo = brugerData.getEmail()+"<a>" +
+                            brugerInfo = "<li class=\"nav-item dropdown\">\n" +
+                                    "<a href=\"login.jsp\" class=\"nav-link dropdown-toggle\" data-toggle=\"dropdown\">\n" +
+                                    "<span class=\"fas fa-user\"></span> " + brugerData.getEmail() +"</a>" +
+                             "<div class=\"dropdown-menu\">\n" +
+                            "<a class=\"dropdown-item\" href=\"http://localhost:8080\">Log ud</a></div>" +
+                             "</li>" +
+                            "<li class=\"nav-item\">" +
                              "<a href=\"#\" class=\"nav-link\">"+
-                             "<span class=\"fas fa-coins\"></span> Saldo: " + brugerData.getSaldo() +
-                            "</a>";
+                             "<span class=\"fas fa-coins\"></span> Saldo: " + BrugerSaldo +
+                            "</a></li>";
                             out.print(brugerInfo);
                         } else {
-                            out.print("Log Ind<a/>");
+                            out.print("<li class=\"nav-item\"><a href=\"login.jsp\" class=\"nav-link\">\n" +
+                            "<span class=\"fas fa-user\"></span>" +
+                            " Log Ind<a/>" +
+                             "</li>");
                         }
 
                     %>

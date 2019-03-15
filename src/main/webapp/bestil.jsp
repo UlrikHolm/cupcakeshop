@@ -6,6 +6,19 @@
 <html lang="en">
 <%@ include file = "include/header.jsp" %>
 <div class="container bg-white pt-4">
+    <%  String besked = (String) request.getAttribute("message");
+        String status = (String) request.getAttribute("status");
+        if (besked != null && status != null) {
+            String alert = "";
+            if (status.equals("ok")) {
+                alert = "<div class=\"alert alert-success\">_message_</div>";
+            } else {
+                alert = "<div class=\"alert alert-danger\">_message_</div>";
+            }
+            alert = alert.replace("_message_", besked);
+            out.println(alert);
+        }
+    %>
     <div class="row">
         <div class="col text-center">
             <h2>Vælg og bestil her:</h2>
@@ -19,7 +32,7 @@
             <label>Bund:</label>
             <select class="form-control" name="bottom">
                 <option value="0" disabled selected>Vælg bund
-                   <%
+                        <%
 
                     List<BundCake> bundList = (List<BundCake>) request.getAttribute("bundlisten");
 
@@ -27,7 +40,7 @@
                         String bundOption = "";
 
                         String printBundID = Integer.toString(bundList.get(i).getBundID());
-                        String printBundNavn = bundList.get(i).getNavnBund();
+                        String printBundNavn = bundList.get(i).getNavnBund()+"  "+Integer.toString(bundList.get(i).getPrisBund());
 
                         bundOption = "<option value=\"_printBundID_\">_printBundNavn_</option>";
                         bundOption = bundOption.replace("_printBundNavn_",printBundNavn);
@@ -41,7 +54,7 @@
             <label>Topping:</label>
             <select class="form-control" name="top">
                 <option value="0" disabled selected>Vælg top
-                <%
+                        <%
 
                     List<TopCake> topList = (List<TopCake>) request.getAttribute("toplisten");
 
@@ -49,15 +62,16 @@
                         String topOption = "";
 
                         String printTopID = Integer.toString(topList.get(i).getTopID());
-                        String printTopNavn = topList.get(i).getNavnTop();
+                        String printTopNavn = topList.get(i).getNavnTop()+"  "+Integer.toString(topList.get(i).getPrisTop());
                         //String printTopID = (String) request.getAttribute("topList.get(i).getTopID()");
                         //String printTopNavn = (String) request.getAttribute("topList.get(i).getNavnTop()");
 
-                        topOption = "<option value=\"_printTopID_\">_printTopNavn_</option>";
-                        //topOption = topOption.replace("_printTopNavn_",printTopNavn);
-                        topOption = topOption.replace("_printTopNavn_",printTopNavn);
-                        topOption = topOption.replace("_printTopID_",printTopID);
+
+                        topOption = "<option value=\"printTopID\">printTopNavn</option>";
+                        topOption = topOption.replace("printTopNavn",printTopNavn);
+                        topOption = topOption.replace("printTopID",printTopID);
                         out.println(topOption);
+
                     }
                 %>
             </select>

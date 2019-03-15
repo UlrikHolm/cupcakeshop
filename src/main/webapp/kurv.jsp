@@ -2,6 +2,8 @@
 <%@ page import="model.KurveLinje" %>
 <%@ page import="java.util.HashMap" %>
 <%@ page import="model.BundCake" %>
+<%@ page import="model.TopCake" %>
+<%@ page import="datamappers.TopBundMapper" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!doctype html>
 <html lang="en">
@@ -29,40 +31,70 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <%
-                        ArrayList<KurveLinje> kurv = (ArrayList) session.getAttribute("kurvKey");
-                        if (kurv != null)
+                <%
+                    HashMap<Integer, BundCake> bundTabel = TopBundMapper.readBundsHash();
+                    HashMap<Integer, TopCake> topTabel = TopBundMapper.readTopsHash();
+                    String bundNavn = "";
+                    String topNavn = "";
+                    int bundPris = 0;
+                    int topPris = 0;
+                    int totalPris = 0;
+                    ArrayList<KurveLinje> kurv = (ArrayList) session.getAttribute("kurvKey");
+                    if (kurv != null) {
+                        if (kurv.size() > 0){
                         for (int i = 0; i < kurv.size(); i++) {
-                            out.print("<tr>" + " <td>" +
-                            kurv.get(i).getBundID() + "</td><td>" + kurv.get(i).getTopID() + "</td><td>" + kurv.get(i).getAntal() + "</td>" +
-                                    "</tr>");
+                            for (int j : bundTabel.keySet()) {
+                                if (j == kurv.get(i).getBundID()) {
+                                    bundNavn = bundTabel.get(j).getNavnBund();
+                                    bundPris = bundTabel.get(j).getPrisBund();
+                                }
+                            }
+                            for (int j : topTabel.keySet()) {
+                                if (j == kurv.get(i).getTopID()) {
+                                    topNavn = topTabel.get(j).getNavnTop();
+                                    topPris = topTabel.get(j).getPrisTop();
+                                }
+                            }
+                            totalPris = totalPris + ((bundPris + topPris) * kurv.get(i).getAntal());
+                            out.print(
+                                    "<tr>" + " " +
+                                            "<td>" + bundNavn + "</td>" +
+                                            "<td>" + topNavn + "</td>" +
+                                            "<td>" + kurv.get(i).getAntal() + "</td>" +
+                                            "<td>" + (bundPris + topPris) + "</td>" +
+                                            "<td>" + ((bundPris + topPris) * kurv.get(i).getAntal()) +
+                                            "</td>");
+                %>
+                <td>
+                    <form action="/fyldkurv" method="get">
+                        <input type="hidden" name="source" value="<%=i%>"/>
+                        <button type="submit" class="btn btn-danger btn-block">Fjern</button>
+                    </form>
+                </td>
+                </tr>
+
+                <%
+                            }
                         } else {
-                            out.print("Listen er tom");
-                        }
-                    %>
-                    <td>Chocolate</td>
-                    <td>Blueberry</td>
-                    <td>2</td>
-                    <td>5</td>
-                    <td>10</td>
-                    <td><a class="btn btn-danger" href="#">Fjern</a></td>
-                </tr>
+                            out.print("Kurv.size = 0" +
+                                    "<div class=\"alert alert-secondary\" role=\"alert\">\n" +
+                                    "Din kurv er tom!\n" +
+                                    "</div>");
+                            }
+                    } else {
+                        out.print("kurv = null" +
+                                "<div class=\"alert alert-secondary\" role=\"alert\">\n" +
+                                "Din kurv er tom!\n" +
+                                "</div>");
+                    }
+                %>
                 <tr>
-                    <td>Chocolate</td>
-                    <td>Blueberry</td>
-                    <td>2</td>
-                    <td>5</td>
-                    <td>10</td>
-                    <td><a class="btn btn-danger" href="#">Fjern</a></td>
-                </tr>
-                <tr>
-                    <td>Chocolate</td>
-                    <td>Blueberry</td>
-                    <td>2</td>
-                    <td>5</td>
-                    <td>10</td>
-                    <td><a class="btn btn-danger" href="#">Fjern</a></td>
+                    <td><b>Total</b></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><%=totalPris%></td>
+                    <td></td>
                 </tr>
                 </tbody>
             </table>
@@ -74,10 +106,13 @@
         <div class="col-7">
         </div>
         <div class="col-md-2">
-            <button type="button" class="btn btn-primary btn-block">Shop videre</button>
+            <a href="bestil" class="btn btn-primary btn-block">Shop videre</a>
         </div>
         <div class="col-md-2">
-            <button type="button" class="btn btn-success btn-block">Betal</button>
+            <form action="/fyldkurv" method="get">
+                <input type="hidden" name="source" value="betal"/>
+                <button type="submit" class="btn btn-success btn-block">Betal</button>
+            </form>
         </div>
     </div>
     <div class="row pt-4">
