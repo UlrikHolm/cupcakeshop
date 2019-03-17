@@ -5,7 +5,6 @@ import datamappers.OrderMapper;
 import datamappers.TopBundMapper;
 import model.*;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -29,6 +28,7 @@ public class FyldKurv extends HttpServlet {
 
         String destination = "/bestil";
         String source = request.getParameter("source");
+        String item_remove = request.getParameter("item_remove");
 
         response.setContentType("text/html;charset=UTF-8");
 
@@ -36,9 +36,11 @@ public class FyldKurv extends HttpServlet {
         HashMap<Integer, TopCake> topTabel = TopBundMapper.readTopsHash();
 
         HttpSession session = request.getSession();
+        int totalSum = 0;
 
         switch (source) {
             case "addtocart":
+
                 String bottom = request.getParameter("bottom");
                 String top = request.getParameter("top");
                 String number = request.getParameter("number");
@@ -52,11 +54,31 @@ public class FyldKurv extends HttpServlet {
                             String.format("Bund: %s, Top: %s, Antal: %s er nu lagt i kurven",
                                     bottom, top, number));
                     KurveLinje kurveLinje = new KurveLinje();
+                    ArrayList<KurveLinje> kurv = (ArrayList) session.getAttribute("kurvKey");
+
+                    if ((Boolean) session.getAttribute("loggedin")) {
+                        Bruger bruger = (Bruger) session.getAttribute("brugerData");
+                        kurveLinje.setBrugerID(bruger.getEmail());
+                        if (kurv!=null) {
+                            for (int i = 0; i <kurv.size() ; i++) {
+                                kurv.get(i).setBrugerID(bruger.getEmail());
+                            }
+                        }
+                    }
+
                     kurveLinje.setBundID(Integer.parseInt(bottom));
                     kurveLinje.setTopID(Integer.parseInt(top));
                     kurveLinje.setAntal(Integer.parseInt(number));
-                    ArrayList<KurveLinje> kurv = new ArrayList<>();
-                    kurv = (ArrayList) session.getAttribute("kurvKey");
+                    kurveLinje.setNavnBund(bundTabel.get(kurveLinje.getBundID()).getNavnBund());
+                    kurveLinje.setNavnTop(topTabel.get(kurveLinje.getTopID()).getNavnTop());
+                    kurveLinje.setPrisIalt(bundTabel.get(kurveLinje.getBundID()).getPrisBund()+
+                                           topTabel.get(kurveLinje.getTopID()).getPrisTop());
+
+                    //totalSum=totalSum + (kurveLinje.getPrisIalt()*kurveLinje.getAntal());
+                    //session.setAttribute("totalSum",totalSum);
+
+                    //ArrayList<KurveLinje> kurv = new ArrayList<>();
+                    //kurv = (ArrayList) session.getAttribute("kurvKey");
                     String bottomNavn = bundTabel.get(Integer.valueOf(bottom)).getNavnBund();
                     String topNavn = topTabel.get(Integer.valueOf(top)).getNavnTop();
 
@@ -69,12 +91,23 @@ public class FyldKurv extends HttpServlet {
                                 String.format("Bund: %s, Top: %s, Antal: %s er nu lagt i kurven",
                                         bottomNavn, topNavn, number));
                     } else {
+                        int maxKurvelinjeID = 0;
+                        for (int i = 0; i < kurv.size(); i++) {
+                            if (kurv.get(i).getKurvelinjeID() >= maxKurvelinjeID) {
+                                maxKurvelinjeID = kurv.get(i).getKurvelinjeID() + 1;
+                            }
+                        }
+                        kurveLinje.setKurvelinjeID(maxKurvelinjeID);
                         kurv.add(kurveLinje);
                         session.setAttribute("kurvKey", kurv);
                         request.setAttribute("status","ok");
                         request.setAttribute("message",
                                 String.format("Bund: %s, Top: %s, Antal: %s er nu lagt i kurven",
                                         bottomNavn, topNavn, number));
+                    }
+
+                    for (int i = 0; i < kurv.size(); i++) {
+                        System.out.println(kurv.get(i).toString());
                     }
 
                 } else {
@@ -86,15 +119,24 @@ public class FyldKurv extends HttpServlet {
                 destination = "/bestil";
                 break;
 
-            case "betal":
+            case "fjern":
 
-                int bundPris = 0;
-                int topPris = 0;
-                int prisStk = 0;
-                int prisIalt = 0;
-                int totalSum = 0;
-                String bundNavn = "";
-                String topNavn = "";
+                ArrayList<KurveLinje> tempKurv2 = (ArrayList) session.getAttribute("kurvKey");
+
+
+                for (int i = 0; i < tempKurv2.size(); i++) {
+
+                    if (item_remove.equals(Integer.toString(i))) {
+                        response.getWriter().println("i = " + i);
+                        tempKurv2.remove(i);
+
+                        request.getRequestDispatcher("/kurv.jsp").forward(request, response);
+                    }
+                }
+
+                break;
+
+            case "betal":
 
                 if (session.getAttribute("loggedin") != null) {
                     if (!(Boolean) session.getAttribute("loggedin")) {
@@ -107,107 +149,59 @@ public class FyldKurv extends HttpServlet {
                 Bruger tempBruger = (Bruger) session.getAttribute("brugerData");
                 ArrayList<KurveLinje> tempKurv = (ArrayList) session.getAttribute("kurvKey");
 
-                for (int i = 0; i < tempKurv.size(); i++) {
-                    System.out.println(tempKurv.get(i).toString());
-                }
 
                 LocalDateTime tidspunkt = LocalDateTime.now();
                 String timeNow = tidspunkt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
                 session.setAttribute("TimeNow",timeNow);
 
 
-                for (int i = 0; i < tempKurv.size(); i++) {
-                    for (int j : bundTabel.keySet()) {
-                        if (j == tempKurv.get(i).getBundID()) {
-                            bundNavn = bundTabel.get(j).getNavnBund();
-                            bundPris = bundTabel.get(j).getPrisBund();
-                        }
-                    }
-                    for (int j : topTabel.keySet()) {
-                        if (j == tempKurv.get(i).getTopID()) {
-                            topNavn = topTabel.get(j).getNavnTop();
-                            topPris = topTabel.get(j).getPrisTop();
-                        }
-                    }
-                    prisStk = bundTabel.get(tempKurv.get(i).getBundID()).getPrisBund()
-                            + topTabel.get(tempKurv.get(i).getTopID()).getPrisTop();
-                    prisIalt = prisStk*tempKurv.get(i).getAntal();
-                    totalSum=totalSum+prisIalt;
-
-                    System.out.println( bundNavn + " " + topNavn + " " + tempKurv.get(i).getAntal() +
-                            " " + prisStk + " " + prisIalt);
-
+                for (int i = 0; i <tempKurv.size() ; i++) {
+                    totalSum = totalSum + tempKurv.get(i).getPrisIalt()*tempKurv.get(i).getAntal();
                 }
 
-                System.out.println("totalSum = " + totalSum);
-                request.setAttribute("totalSum",totalSum);
-
+                System.out.println("totalSum = "+totalSum);
+                session.setAttribute("totalSum",totalSum);
                 int tempSaldo = tempBruger.getSaldo();
                 int nySaldo = tempSaldo-totalSum;
                 if (nySaldo>=0) {
 
                     tempBruger.setSaldo(nySaldo);
-                    BrugerMapper.udskiftSaldo(tempBruger);
-                    session.setAttribute("brugerData",tempBruger);
+                    ArrayList<OrderLinje> kurvOrderLinjer = new ArrayList<>();
 
-                    Order tempOrder = new Order(timeNow, tempBruger.getBrugerID(), totalSum);
-                    System.out.println(tempOrder.getTimeNow()+"  "+tempOrder.getBrugerID());
-                    OrderMapper.createOrder(tempOrder);
-
-                    Order lastOrder = OrderMapper.lastOrder();
-                    response.getWriter().println("Order " + lastOrder.getOrdreID()
-                            +" "+lastOrder.getTimeNow()+" "+lastOrder.getBrugerID()
-                            +" "+lastOrder.getTotalSum());
-
-                    int ordreID = lastOrder.getOrdreID();
                     for (int i = 0; i <tempKurv.size() ; i++) {
+                        //kurvOrderLinjer.get(i).setTopID(tempKurv.get(i).getTopID());
+                        //kurvOrderLinjer.get(i).setBundID(tempKurv.get(i).getBundID());
+                        //kurvOrderLinjer.get(i).setAntal(tempKurv.get(i).getAntal());
+                        //kurvOrderLinjer.get(i).setPrisIalt(tempKurv.get(i).getPrisIalt());
 
-                        prisStk = bundTabel.get(tempKurv.get(i).getBundID()).getPrisBund()
-                                + topTabel.get(tempKurv.get(i).getTopID()).getPrisTop();
-                        prisIalt = prisStk*tempKurv.get(i).getAntal();
-
-                        OrderLinje tempOrderLinje = new OrderLinje (ordreID, tempKurv.get(i).getTopID(),
-                                tempKurv.get(i).getBundID(),
-                                tempKurv.get(i).getAntal(), prisIalt);
-                        OrderMapper.createOrderLinje(tempOrderLinje);
+                        kurvOrderLinjer.add(new OrderLinje(tempKurv.get(i).getTopID(),
+                                                           tempKurv.get(i).getBundID(),
+                                                           tempKurv.get(i).getAntal(),
+                                                           tempKurv.get(i).getPrisIalt()));
                     }
+
+                    for (int i = 0; i <kurvOrderLinjer.size() ; i++) {
+                        System.out.println(kurvOrderLinjer.get(i).toString());
+                    }
+
+                    OrderMapper.createOrderAndLines(kurvOrderLinjer,timeNow,tempBruger,totalSum);
+                    ArrayList<KurveLinje> tempkurv = null;
+                    session.setAttribute("kurvKey", tempkurv);
 
 
                     destination = "/betaling.jsp";
 
                 } else {
-
                     // Saldo bliver negativ
                     destination = "/neg_saldo.jsp";
-
-
                 }
 
-
                 break;
-
-
-        }
-
-        ArrayList<KurveLinje> tempKurv = (ArrayList) session.getAttribute("kurvKey");
-
-
-        //kurv = (ArrayList) session.getAttribute("kurvKey");
-
-        for (int i = 0; i < tempKurv.size(); i++) {
-
-            if (source.equals(Integer.toString(i))) {
-                response.getWriter().println("i = " + i);
-                tempKurv.remove(i);
-
-                request.getRequestDispatcher("/kurv.jsp").forward(request, response);
-            }
         }
 
         request.getServletContext().getRequestDispatcher(destination).forward(request, response);
 
     }
-
 }
 
 // GAMMEL KODE

@@ -63,9 +63,6 @@
 
                         String printTopID = Integer.toString(topList.get(i).getTopID());
                         String printTopNavn = topList.get(i).getNavnTop()+"  "+Integer.toString(topList.get(i).getPrisTop());
-                        //String printTopID = (String) request.getAttribute("topList.get(i).getTopID()");
-                        //String printTopNavn = (String) request.getAttribute("topList.get(i).getNavnTop()");
-
 
                         topOption = "<option value=\"printTopID\">printTopNavn</option>";
                         topOption = topOption.replace("printTopNavn",printTopNavn);

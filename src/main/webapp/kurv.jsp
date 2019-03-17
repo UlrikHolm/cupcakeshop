@@ -32,42 +32,25 @@
                 </thead>
                 <tbody>
                 <%
-                    HashMap<Integer, BundCake> bundTabel = TopBundMapper.readBundsHash();
-                    HashMap<Integer, TopCake> topTabel = TopBundMapper.readTopsHash();
-                    String bundNavn = "";
-                    String topNavn = "";
-                    int bundPris = 0;
-                    int topPris = 0;
                     int totalPris = 0;
                     ArrayList<KurveLinje> kurv = (ArrayList) session.getAttribute("kurvKey");
                     if (kurv != null) {
                         if (kurv.size() > 0){
                         for (int i = 0; i < kurv.size(); i++) {
-                            for (int j : bundTabel.keySet()) {
-                                if (j == kurv.get(i).getBundID()) {
-                                    bundNavn = bundTabel.get(j).getNavnBund();
-                                    bundPris = bundTabel.get(j).getPrisBund();
-                                }
-                            }
-                            for (int j : topTabel.keySet()) {
-                                if (j == kurv.get(i).getTopID()) {
-                                    topNavn = topTabel.get(j).getNavnTop();
-                                    topPris = topTabel.get(j).getPrisTop();
-                                }
-                            }
-                            totalPris = totalPris + ((bundPris + topPris) * kurv.get(i).getAntal());
+                            totalPris = totalPris + (kurv.get(i).getPrisIalt() * kurv.get(i).getAntal());
                             out.print(
                                     "<tr>" + " " +
-                                            "<td>" + bundNavn + "</td>" +
-                                            "<td>" + topNavn + "</td>" +
+                                            "<td>" + kurv.get(i).getNavnBund() + "</td>" +
+                                            "<td>" + kurv.get(i).getNavnTop() + "</td>" +
                                             "<td>" + kurv.get(i).getAntal() + "</td>" +
-                                            "<td>" + (bundPris + topPris) + "</td>" +
-                                            "<td>" + ((bundPris + topPris) * kurv.get(i).getAntal()) +
+                                            "<td>" + kurv.get(i).getPrisIalt() + "</td>" +
+                                            "<td>" + (kurv.get(i).getPrisIalt() * kurv.get(i).getAntal())+
                                             "</td>");
                 %>
                 <td>
                     <form action="/fyldkurv" method="get">
-                        <input type="hidden" name="source" value="<%=i%>"/>
+                        <input type="hidden" name="source" value="fjern"/>
+                        <input type="hidden" name="item_remove" value="<%=i%>"/>
                         <button type="submit" class="btn btn-danger btn-block">Fjern</button>
                     </form>
                 </td>
@@ -75,14 +58,17 @@
 
                 <%
                             }
-                        } else {
-                            out.print("Kurv.size = 0" +
+                        }
+
+                        else {
+                            out.print(
                                     "<div class=\"alert alert-secondary\" role=\"alert\">\n" +
                                     "Din kurv er tom!\n" +
                                     "</div>");
                             }
+
                     } else {
-                        out.print("kurv = null" +
+                        out.print(
                                 "<div class=\"alert alert-secondary\" role=\"alert\">\n" +
                                 "Din kurv er tom!\n" +
                                 "</div>");

@@ -24,12 +24,12 @@
                     <th scope="col">Total sum</th>
                 </tr>
                 </thead>
-                <form action="/kunder" method="get">
+                <!--<form action="/kunder" method="get">-->
                 <tbody>
                 <%
                     List<Order> ordreList = (List<Order>) request.getAttribute("ordrelisten");
-
-                    for (int i = 0; i < ordreList.size() ; i++) {
+                    //for (int i = 0; i < ordreList.size() ; i++) {
+                    for (int i = ordreList.size()-1; i >= 0; i--) {
                         String ordretable = "";
 
                         String printOrdreID = Integer.toString(ordreList.get(i).getOrdreID());
@@ -37,8 +37,11 @@
                         String printOrdreBrugerID = Integer.toString(ordreList.get(i).getBrugerID());
                         String printOrdreTotal = Integer.toString(ordreList.get(i).getTotalSum());
 
-                        ordretable = "<tr><th>_printOrdreID_</th><td> _printOrdreTime_</td><td>_printOrdreBrugerID_</td>" +
-                                "<td>_printOrdreTotal_</td></tr>";
+                        ordretable = "<tr>" +
+                                          "<th>_printOrdreID_</th>" +
+                                          "<td>_printOrdreTime_</td><td>_printOrdreBrugerID_</td>" +
+                                          "<td>_printOrdreTotal_</td>" +
+                                     "</tr>";
                         ordretable = ordretable.replace("_printOrdreID_",printOrdreID);
                         ordretable = ordretable.replace("_printOrdreTime_",printOrdreTime);
                         ordretable = ordretable.replace("_printOrdreBrugerID_",printOrdreBrugerID);

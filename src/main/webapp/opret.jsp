@@ -19,7 +19,8 @@
                 String status = (String) request.getAttribute("status");
                 if (besked != null && status != null) {
                     String alert = "";
-                    if (status.equals("tomkode") || status.equals("ikkeenskoder") || status.equals("ikkemail")) {
+                    if    (status.equals("tomkode") || status.equals("ikkeenskoder")
+                        || status.equals("ikkemail") || status.equals("ensBrugerNavn")) {
                         alert = "<div class=\"alert alert-danger\">_message_</div>";
                     } else if (status.equals("brugerlaves")){
                         alert = "<div class=\"alert alert-success\">_message_</div>";

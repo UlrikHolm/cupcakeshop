@@ -44,8 +44,8 @@
                 <%
 
                     //int kundeordrer = (int) request.getAttribute("kundeordrer");
-
-                    for (int i = 0; i < OrderMapper.loadOrder().size(); i++) {
+                    //for (int i = 0; i < OrderMapper.loadOrder().size(); i++) {
+                    for (int i = OrderMapper.loadOrder().size()-1; i >= 0 ; i--) {
                         if (kundeordrer == OrderMapper.loadOrder().get(i).getBrugerID()) {
                             String ordretable = "";
                             String printOrdreID = Integer.toString(OrderMapper.loadOrder().get(i).getOrdreID());

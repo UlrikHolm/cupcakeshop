@@ -1,15 +1,11 @@
 package datamappers;
 
+import model.Bruger;
 import model.Order;
 import model.OrderLinje;
 import util.Connector;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -78,6 +74,60 @@ public class OrderMapper {
 
     }
 
+    public static void createOrderAndLines(ArrayList<OrderLinje> kurv, String timeNow, Bruger bruger, int totalSum ){
+        int ordreID = 0;
+        Connection connection = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        String sqlOrder = "INSERT INTO `Cupcake`.`Ordre` (`tidspunkt`, `bruger_id`, `total_sum`) VALUES (?, ?, ?)";
+        try {
+            Connection con = Connector.connection();
+
+            ps = con.prepareStatement(sqlOrder, Statement.RETURN_GENERATED_KEYS);
+
+
+            ps.setString(1, timeNow);
+            ps.setInt(2, bruger.getBrugerID());
+            ps.setInt(3, totalSum);
+            ps.executeUpdate();
+            rs = ps.getGeneratedKeys();
+
+            if (rs.next()){
+                ordreID = rs.getInt(1);
+                String sqlOrderLines ="INSERT INTO `Cupcake`.`OrdreLinjer` (`ordre_id`, `top_id`, `bund_id`, `antal`, `pris_ialt`) VALUES (?, ?, ?, ?, ?);";
+
+                for (int i = 0; i <kurv.size() ; i++) {
+                    ps = con.prepareStatement(sqlOrderLines);
+                    ps.setInt(1, ordreID);
+                    ps.setInt(2, kurv.get(i).getTopID());
+                    ps.setInt(3, kurv.get(i).getBundID());
+                    ps.setInt(4, kurv.get(i).getAntal());
+                    ps.setInt(5, kurv.get(i).getPrisIalt());
+                    ps.executeUpdate();
+                }
+
+                String sqlSaldo = "UPDATE Cupcake.Bruger SET saldo = ? WHERE (bruger_id = ?);";
+                ps = con.prepareStatement(sqlSaldo);
+
+                ps.setInt(1, bruger.getSaldo());
+                ps.setInt(2, bruger.getBrugerID());
+                ps.executeUpdate();
+
+            }
+
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+}
+
+// Gammel kode
+
+
+/*
     public static void createOrderLinje(OrderLinje orderLinje) {
         Connection connection = null;
         PreparedStatement ps = null;
@@ -103,7 +153,9 @@ public class OrderMapper {
             e.printStackTrace();
         }
     }
+*/
 
+/*
     public static void createOrder(Order order) {
         Connection connection = null;
         PreparedStatement ps = null;
@@ -130,7 +182,9 @@ public class OrderMapper {
             e.printStackTrace();
         }
     }
+*/
 
+/*
     public static Order lastOrder() {
 
         Order lastOrder = new Order();
@@ -163,7 +217,9 @@ public class OrderMapper {
         }
         return lastOrder;
     }
+*/
 
+/*
     public static void createTempKurv(OrderLinje orderLinje) {
         Connection connection = null;
         PreparedStatement ps = null;
@@ -190,7 +246,9 @@ public class OrderMapper {
             e.printStackTrace();
         }
     }
+*/
 
+/*
     public static List<OrderLinje> loadTempKurv() {
         List<OrderLinje> tempOrderList = new ArrayList<>();
 
@@ -226,8 +284,9 @@ public class OrderMapper {
         }
         return tempOrderList;
     }
+*/
 
-
+/*
     public static void deleteTempKurv() {
 
         Connection connection = null;
@@ -246,8 +305,9 @@ public class OrderMapper {
         }
 
     }
+*/
 
-    public static void deleteLinjeKurv(int ordrelinjeID) {
+    /*public static void deleteLinjeKurv(int ordrelinjeID) {
 
         Connection connection = null;
         PreparedStatement ps = null;
@@ -267,7 +327,9 @@ public class OrderMapper {
         }
 
     }
+*/
 
 
 
-}
+
+

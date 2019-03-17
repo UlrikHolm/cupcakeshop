@@ -17,17 +17,26 @@ public class OrderLinje {
         this.prisIalt = prisIalt;
     }
 
-    public OrderLinje(int ordreID, int topID, int bundID, int antal, int prisIalt) {
-        this.ordreID = ordreID;
+    public OrderLinje(int topID, int bundID, int antal, int prisIalt) {
         this.topID = topID;
         this.bundID = bundID;
         this.antal = antal;
         this.prisIalt = prisIalt;
     }
 
-
-
     public OrderLinje() {
+    }
+
+    @Override
+    public String toString() {
+        return "OrderLinje{" +
+                "ordrelinjeID=" + ordrelinjeID +
+                ", ordreID=" + ordreID +
+                ", topID=" + topID +
+                ", bundID=" + bundID +
+                ", antal=" + antal +
+                ", prisIalt=" + prisIalt +
+                '}';
     }
 
     public int getOrdrelinjeID() {

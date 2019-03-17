@@ -36,12 +36,12 @@
                     }
                     if(brugerType == 2){
                         out.print(
-                                "<li class=\"nav-item\">" +
-                    " <a href=\"ordrer\" class=\"nav-link\">Ordrer </a> " +
-                                        "</li>"+
-                "<li class=\"nav-item\">"+
-                    "<a href=\"kunder\" class=\"nav-link\">Kunder</a>"+
-                "</li>"
+                        "<li class=\"nav-item\">" +
+                             " <a href=\"ordrer\" class=\"nav-link\">Ordrer </a> " +
+                        "</li>"+
+                        "<li class=\"nav-item\">"+
+                             "<a href=\"kunder\" class=\"nav-link\">Kunder</a>"+
+                        "</li>"
                         );
                     }
                 %>
@@ -54,20 +54,22 @@
                         }
 
                         Bruger brugerData = (Bruger)session.getAttribute("brugerData");
-
                         String brugerInfo = "";
-
-                        String BrugerSaldo = "";
+                        String brugerSaldo = "";
 
                         if (loggedin){
+                            brugerSaldo = Integer.toString(brugerData.getSaldo());
+/*
                             for (int i = 0; i < BrugerMapper.readBrugers().size(); i++) {
                                 if (BrugerMapper.readBrugers().get(i).getBrugerID() == brugerData.getBrugerID()){
                                     System.out.println(i);
-                                    BrugerSaldo = Integer.toString(BrugerMapper.readBrugers().get(i).getSaldo());
+                                    brugerSaldo = Integer.toString(BrugerMapper.readBrugers().get(i).getSaldo());
 
                                 }
-
                             }
+
+*/
+
                         }
 
 
@@ -80,7 +82,7 @@
                              "</li>" +
                             "<li class=\"nav-item\">" +
                              "<a href=\"#\" class=\"nav-link\">"+
-                             "<span class=\"fas fa-coins\"></span> Saldo: " + BrugerSaldo +
+                             "<span class=\"fas fa-coins\"></span> Saldo: " + brugerSaldo +
                             "</a></li>";
                             out.print(brugerInfo);
                         } else {

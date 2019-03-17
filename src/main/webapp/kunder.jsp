@@ -28,7 +28,7 @@
                 <tbody>
                 <%
                     List<Bruger> brugerList = (List<Bruger>) request.getAttribute("brugerlisten");
-
+                    //for (int i = brugerList.size()-1;i >= 0; i--) {
                     for (int i = 0; i < brugerList.size() ; i++) {
                         String brugerth = "";
 
@@ -36,13 +36,19 @@
                         String printBrugerEmail = brugerList.get(i).getEmail();
                         String printBrugerSaldo =  Integer.toString(brugerList.get(i).getSaldo());
 
-                        brugerth = "<tr><th>_printBrugerID_</th><td> _printBrugerEmail_</td><td>_printBrugerSaldo_</td>" +
-                        "<td><form action=\"/kunder\" method=\"get\">"+"<input type=\"hidden\" name=\"kundeordrer\" value=\"" + printBrugerID + "\"/>" +
-                        "<button type=\"submit\" class=\"btn btn-success \">Ordrer</button>\n</form>";
-                        brugerth = brugerth.replace("_printBrugerID_",printBrugerID);
-                        brugerth = brugerth.replace("_printBrugerEmail_",printBrugerEmail);
-                        brugerth = brugerth.replace("_printBrugerSaldo_",printBrugerSaldo);
-                        out.println(brugerth);
+                        brugerth = "<tr>" +
+                                "<th>_printBrugerID_</th>" +
+                                "<td> _printBrugerEmail_</td>" +
+                                "<td>_printBrugerSaldo_</td>" +
+                                "<td>" + "" +
+                                "<form action=\"/kunder\" method=\"get\">"+"" +
+                                "<input type=\"hidden\" name=\"kundeordrer\" value=\"" + printBrugerID + "\"/>" +
+                                "<button type=\"submit\" class=\"btn btn-success \">Ordrer</button>\n" +
+                                "</form>";
+                                 brugerth = brugerth.replace("_printBrugerID_",printBrugerID);
+                                 brugerth = brugerth.replace("_printBrugerEmail_",printBrugerEmail);
+                                 brugerth = brugerth.replace("_printBrugerSaldo_",printBrugerSaldo);
+                                 out.println(brugerth);
                     }
                 %>
                 </tbody>

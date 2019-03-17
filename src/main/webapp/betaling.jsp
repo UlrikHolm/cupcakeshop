@@ -32,7 +32,7 @@
             <b>Kunde: </b> <% out.print(brugerData.getEmail());%>
 
             <p>
-                <b>Der skal betales ialt: </b> <%out.print(request.getAttribute("totalSum"));%>
+                <b>Der skal betales ialt: </b> <%out.print(session.getAttribute("totalSum"));%>
             </br>
                 <b>Din nye saldo er: </b><%out.print(brugerData.getSaldo());%>
 
